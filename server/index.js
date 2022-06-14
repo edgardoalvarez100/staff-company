@@ -1,5 +1,5 @@
 const express = require("express");
-const { dbConnection } = require("../database/config");
+const { dbConnection, sequelize } = require("../database/config");
 
 class Server {
   constructor() {
@@ -15,9 +15,13 @@ class Server {
 
   async connectDB() {
     await dbConnection();
+    await sequelize.sync();
+    console.log("All models were synchronized successfully.");
   }
 
-  middlewares() {}
+  middlewares() {
+    this.app.use(express.json());
+  }
 
   routes() {
     this.app.use("/api/users", require("../router/users"));
