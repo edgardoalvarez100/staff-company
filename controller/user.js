@@ -15,7 +15,7 @@ const usersGet = async (req, res = response) => {
 
 const usersPost = async (req, res = response) => {
   const { name, email, password, rol_id } = req.body;
-  const user = new User({ name, email, password, rol_id });
+  const user = new User({ name, email, password, rol_id, status: 1 });
 
   //encriptar contraseña
   const salt = bcryptjs.genSaltSync();
@@ -27,8 +27,8 @@ const usersPost = async (req, res = response) => {
 };
 
 const userPostAdmin = async (req, res = response) => {
-  const { name, email, password, rol } = req.body;
-  const user = new User({ name, email, password, rol });
+  const { name, email, password, rol_id } = req.body;
+  const user = new User({ name, email, password, rol_id });
 
   const salt = bcryptjs.genSaltSync();
   user.password = bcryptjs.hashSync(password, salt);

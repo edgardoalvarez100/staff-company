@@ -1,9 +1,9 @@
 const { Rol, User } = require("../model");
 
-const esRolValido = async (rol = "") => {
-  const existeRol = await Rol.findOne({ where: { rol } });
+const esRolValido = async (rol_id = "") => {
+  const existeRol = await Rol.findOne({ where: { id: rol_id } });
   if (!existeRol) {
-    throw new Error(`El rol ${rol} no esta registrado en la BD`);
+    throw new Error(`El rol ${rol_id} no esta registrado en la BD`);
   }
 };
 
