@@ -1,6 +1,6 @@
 const { response } = require("express");
-const User = require("../model/user");
 const bcryptjs = require("bcryptjs");
+const { Rol, User } = require("../model");
 
 const usersGet = async (req, res = response) => {
   const { limit = 5, from = 0 } = req.query;
@@ -14,14 +14,23 @@ const usersGet = async (req, res = response) => {
 };
 
 const usersPost = async (req, res = response) => {
-  const { name, email, password, rol_id } = req.body;
-  const user = new User({ name, email, password, rol_id, status: 1 });
+  let { name, email, password, rol_id } = req.body;
+  const rol = await Rol.findOne({ where: { id: rol_id } });
 
   //encriptar contraseña
   const salt = bcryptjs.genSaltSync();
-  user.password = bcryptjs.hashSync(password, salt);
+  password = bcryptjs.hashSync(password, salt);
 
-  await user.save();
+  const user = await User.create(
+    { name, email, password, status: 1, rol },
+    {
+      include: [
+        {
+          association: User.Rol,
+        },
+      ],
+    }
+  );
 
   res.json({ user });
 };
