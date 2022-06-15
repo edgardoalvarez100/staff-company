@@ -13,6 +13,6 @@ const User = sequelize.define(
   },
   { underscored: true }
 );
-User.Rol = User.belongsTo(Rol); // A BelongsTo B
+User.Rol = User.belongsTo(Rol, { foreignKey: "rol_id" }); // A BelongsTo B
 Rol.Users = Rol.hasMany(User);
 module.exports = User;

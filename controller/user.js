@@ -8,25 +8,24 @@ const usersGet = async (req, res = response) => {
 
   const [total, users] = await Promise.all([
     User.count(query),
-    User.findAll(query),
+    User.findAll({ include: { model: Rol, attributes: ["id", "name"] } }),
   ]);
   res.json({ total, users });
 };
 
 const usersPost = async (req, res = response) => {
   let { name, email, password, rol_id } = req.body;
-  const rol = await Rol.findOne({ where: { id: rol_id } });
 
   //encriptar contraseña
   const salt = bcryptjs.genSaltSync();
   password = bcryptjs.hashSync(password, salt);
 
   const user = await User.create(
-    { name, email, password, status: 1, rol },
+    { name, email, password, status: 1, rol_id },
     {
       include: [
         {
-          association: User.Rol,
+          model: Rol,
         },
       ],
     }

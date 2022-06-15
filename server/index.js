@@ -15,7 +15,7 @@ class Server {
 
   async connectDB() {
     await dbConnection();
-    await sequelize.sync();
+    await sequelize.sync({ force: false });
     console.log("All models were synchronized successfully.");
   }
 
